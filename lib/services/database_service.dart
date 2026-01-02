@@ -1,3 +1,4 @@
+import 'package:chats/services/encryption_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:uuid/uuid.dart';
 
@@ -46,6 +47,7 @@ class DatabaseService {
 
   // Chat Sub-collection
   Stream<List<Map<String, dynamic>>> getMessages(String roomId) {
+    final encryption = EncryptionService(roomId);
     return _rooms
         .doc(roomId)
         .collection('messages')
@@ -55,6 +57,13 @@ class DatabaseService {
           return snapshot.docs.map((doc) {
             final data = doc.data();
             data['id'] = doc.id; // Include doc ID for marking as seen
+
+            // Decrypt the message text
+            final encryptedText = data['text'] as String?;
+            if (encryptedText != null) {
+              data['text'] = encryption.decrypt(encryptedText);
+            }
+
             return data;
           }).toList();
         });
@@ -66,8 +75,11 @@ class DatabaseService {
     required String userId,
     required String senderName,
   }) async {
+    final encryption = EncryptionService(roomId);
+    final encryptedText = encryption.encrypt(text);
+
     await _rooms.doc(roomId).collection('messages').add({
-      'text': text,
+      'text': encryptedText,
       'userId': userId,
       'senderName': senderName,
       'timestamp': FieldValue.serverTimestamp(),
