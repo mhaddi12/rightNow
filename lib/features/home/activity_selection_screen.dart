@@ -5,9 +5,15 @@ import 'package:chats/features/home/room_list_screen.dart'; // Will create next
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ActivitySelectionScreen extends StatelessWidget {
+class ActivitySelectionScreen extends StatefulWidget {
   const ActivitySelectionScreen({super.key});
 
+  @override
+  State<ActivitySelectionScreen> createState() =>
+      _ActivitySelectionScreenState();
+}
+
+class _ActivitySelectionScreenState extends State<ActivitySelectionScreen> {
   final List<Map<String, dynamic>> activities = const [
     {'name': 'Working', 'icon': Icons.work_outline, 'color': Color(0xFF6C63FF)},
     {'name': 'Waiting', 'icon': Icons.access_time, 'color': Color(0xFF03DAC6)},
@@ -20,6 +26,20 @@ class ActivitySelectionScreen extends StatelessWidget {
       'color': Color(0xFF9575CD),
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    // Trigger global cleanup of expired rooms on app launch/home screen enter
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        Provider.of<DatabaseService>(
+          context,
+          listen: false,
+        ).cleanupExpiredRooms();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
