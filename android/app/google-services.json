@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "888451958802",
+    "project_id": "rightnow-chat-app",
+    "storage_bucket": "rightnow-chat-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:888451958802:android:dabbccb2f50121422ef0cb",
+        "android_client_info": {
+          "package_name": "com.rightnow.chat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwdhcDbFqcHDy776hxwXMDShiAs6c5rFw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
